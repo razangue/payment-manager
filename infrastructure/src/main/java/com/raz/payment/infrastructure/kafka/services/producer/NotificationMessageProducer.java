@@ -24,7 +24,7 @@ public class NotificationMessageProducer implements NotificationMessageSender {
     private final KafkaTemplate<String, String> kafkaTemplate;
     @Value("${operation.notification.kafka.topic.name}")
     private String topic;
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper customObjectMapper;
 
     @Override
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -32,7 +32,7 @@ public class NotificationMessageProducer implements NotificationMessageSender {
         operationDetails.stream().map(this::fromOperationDetail).forEach(notif -> {
             try {
                 // Serialize to JSON
-                String json = objectMapper.writeValueAsString(notif);
+                String json = customObjectMapper.writeValueAsString(notif);
 
                 // Business key for ordering and idempotence → operationDetailId
                 String messageKey = notif.getOperationDetailId().toString();
@@ -60,7 +60,7 @@ public class NotificationMessageProducer implements NotificationMessageSender {
     public Notification fromOperationDetail(OperationDetail operationDetail) {
         return Notification.builder()
                 .accountNumber(operationDetail.getAccount().getAccountNumber())
-                .operationDetailId(operationDetail.getOperation().getId())
+                .operationDetailId(operationDetail.getId())
                 .accountBalanceBeforeOperation(operationDetail.getAccountBalanceBeforeOperation())
                 .amount(operationDetail.getAmount())
                 .accountBalanceAfterOperation(operationDetail.getAccountBalanceAfterOperation())

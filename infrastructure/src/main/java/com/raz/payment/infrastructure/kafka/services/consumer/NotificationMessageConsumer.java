@@ -20,7 +20,10 @@ public class NotificationMessageConsumer {
    private final ObjectMapper customObjectMapper;
    private final NotificationService notificationService;
 
-   @KafkaListener(topics = "${operation.notification.kafka.topic.name}", groupId = "${spring.kafka.consumer.group-id}")
+   @KafkaListener(topics = "${operation.notification.kafka.topic.name}", 
+   groupId = "${spring.kafka.consumer.group-id}",
+containerFactory = "kafkaListenerContainerFactory"
+)
    public void consumeNotification(ConsumerRecord<String, String> record,
                                                      Acknowledgment ack) {
         String key = record.key();
