@@ -1,6 +1,7 @@
 package com.raz.payment.infrastructure.database.model.entity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,8 +12,11 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +29,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
+@Table(name = "account")
 public class AccountEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,12 +37,16 @@ public class AccountEntity {
 
     @Column(unique = true, nullable = false)
     private String accountNumber;
+
+    @Builder.Default
+    private BigDecimal currentBalance = BigDecimal.ZERO;
     
-    private BigDecimal currentBalance;
+    @Builder.Default
+    @ManyToMany
+    @JoinTable(name = "client_account", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "client_id"))
+    private List<ClientEntity> owners = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "accounts", fetch = FetchType.EAGER)
-    private List<ClientEntity> owners;
-
+    @Builder.Default
     @OneToMany(mappedBy = "sourceAccount", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AccountOperationEntity> operations;
+    private List<AccountOperationEntity> operations = new ArrayList<>();
 }

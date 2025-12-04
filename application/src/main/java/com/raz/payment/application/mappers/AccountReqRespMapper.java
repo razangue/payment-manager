@@ -1,5 +1,8 @@
 package com.raz.payment.application.mappers;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
 import com.raz.payment.application.requests.CreateAccountRequest;
@@ -19,7 +22,7 @@ public class AccountReqRespMapper
                 .id(account.getId())
                 .accountNumber(account.getAccountNumber())
                 .currentBalance(account.getCurrentBalance())
-                .owners(account.getOwners().stream().map(clientReqRespMapper::domainToResponse).toList())
+                .owners(account.getOwners().stream().map(clientReqRespMapper::domainToResponse).collect(Collectors.toCollection(ArrayList::new)))
                 // .operations()
                 .build();
     }
@@ -29,15 +32,15 @@ public class AccountReqRespMapper
                 .id(account.getId())
                 .accountNumber(account.getAccountNumber())
                 .currentBalance(account.getCurrentBalance())
-                .owners(account.getOwners().stream().map(clientReqRespMapper::responseToDomain).toList())
+                .owners(account.getOwners().stream().map(clientReqRespMapper::responseToDomain).collect(Collectors.toCollection(ArrayList::new)))
                 // .operations()
                 .build();
     }
 
     public Account requestToDomain(CreateAccountRequest createAccountRequest) {
         return Account.builder()
-                .accountNumber(createAccountRequest.accountNumber())
-                .owners(createAccountRequest.owners().stream().map(clientReqRespMapper::responseToDomain).toList())
+                .accountNumber(createAccountRequest.getAccountNumber())
+                .owners(createAccountRequest.getOwners().stream().map(clientReqRespMapper::responseToDomain).collect(Collectors.toCollection(ArrayList::new)))
                 .build();
     }
 }

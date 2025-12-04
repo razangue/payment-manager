@@ -1,6 +1,7 @@
 package com.raz.payment.application.responses;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Builder;
@@ -13,7 +14,10 @@ import lombok.Setter;
 public class AccountResponse {
     private String id;
     private String accountNumber;
-    private BigDecimal currentBalance;
-    private List<ClientResponse> owners;
-    private List<AccountOperationResponse> operations;
+    @Builder.Default
+    private BigDecimal currentBalance=BigDecimal.ZERO;
+    @Builder.Default
+    private List<ClientResponse> owners = new ArrayList<>();
+    @Builder.Default
+    private List<AccountOperationResponse> operations = new ArrayList<>();
 }

@@ -18,17 +18,14 @@ public class AccountMapper implements EntityMapper<AccountEntity, Account> {
 
         public AccountEntity toEntity(Account account) {
                 return accountMapperWithoutOperationsBuilder.toAccountEntityBuilder(account)
-                                .operations(Optional.ofNullable(account.getOperations())
-                                .orElse(new ArrayList<>())
-                                .stream()
+                                .operations(account.getOperations().stream()
                                                 .map(accountOperationMapper::toEntity).toList())
                                 .build();
         }
 
         public Account toDomainModel(AccountEntity accountEntity) {
                 return accountMapperWithoutOperationsBuilder.toAccountBuilder(accountEntity)
-                                .operations(Optional.ofNullable(accountEntity.getOperations())
-                                .orElse(new ArrayList<>()).stream()
+                                .operations(accountEntity.getOperations().stream()
                                                 .map(accountOperationMapper::toDomainModel).toList())
                                 .build();
         }

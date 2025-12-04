@@ -7,6 +7,8 @@ import com.raz.payment.domain.model.client.OperationDetailType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +25,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "operation_detail")
+@Table(name = "notification")
 public class NotificationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +39,7 @@ public class NotificationEntity {
     private BigDecimal accountBalanceBeforeOperation;
     private BigDecimal amount;
     private BigDecimal accountBalanceAfterOperation;
+    @Enumerated(EnumType.STRING)
     private OperationDetailType operationDetailType;
     private LocalDateTime date;
 }

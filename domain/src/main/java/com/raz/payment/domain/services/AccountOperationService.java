@@ -31,6 +31,7 @@ public class AccountOperationService {
   private final AccountOperationRepository accountOperationRepository;
   private final NotificationMessageSender notificationMessageSender;
 
+  @Transactional
   public AccountOperation save(AccountOperation accountOperation) {
     return accountOperationRepository.save(accountOperation);
   }
@@ -113,7 +114,7 @@ public class AccountOperationService {
     AccountOperation saveOp = save(accountOperation);
     Account updatedAccount = accountService.updateAccountBalance(sourceAccount, balanceAfterOperation);
     OperationDetail operationDetail = operationDetailService.saveCreatedOperationDetail(updatedAccount,
-        accountOperation, operationDetailType, currentBalance, amount, balanceAfterOperation);
+        saveOp, operationDetailType, currentBalance, amount, balanceAfterOperation);
     notificationMessageSender.sendNotificationOperations(Arrays.asList(operationDetail));
     return saveOp;
   }

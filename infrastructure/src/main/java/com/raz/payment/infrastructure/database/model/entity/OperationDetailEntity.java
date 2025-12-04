@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import com.raz.payment.domain.model.client.OperationDetailType;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,6 +35,7 @@ public class OperationDetailEntity {
     private BigDecimal accountBalanceBeforeOperation;
     private BigDecimal amount;
     private BigDecimal accountBalanceAfterOperation;
+    @Enumerated(EnumType.STRING)
     private OperationDetailType operationDetailType;
     private LocalDateTime date;
 

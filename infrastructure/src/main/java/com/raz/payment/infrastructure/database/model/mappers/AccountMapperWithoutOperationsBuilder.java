@@ -1,5 +1,6 @@
 package com.raz.payment.infrastructure.database.model.mappers;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,10 +19,11 @@ public class AccountMapperWithoutOperationsBuilder {
 
     public AccountEntity.AccountEntityBuilder toAccountEntityBuilder(Account account) {
         return AccountEntity.builder()
+                .id(Optional.ofNullable(account.getId()).map(UUID::fromString).orElse(null))
                 .accountNumber(account.getAccountNumber())
                 .currentBalance(account.getCurrentBalance())
-                .owners(account.getOwners().stream()
-                        .map(clientMapper::toEntity).toList());
+                .owners(new ArrayList<>(account.getOwners().stream()
+                        .map(clientMapper::toEntity).toList()));
     }
 
     public Account.AccountBuilder toAccountBuilder(AccountEntity accountEntity) {
@@ -29,7 +31,7 @@ public class AccountMapperWithoutOperationsBuilder {
                 .id(Optional.ofNullable(accountEntity.getId()).map(UUID::toString).orElse(null))
                 .accountNumber(accountEntity.getAccountNumber())
                 .currentBalance(accountEntity.getCurrentBalance())
-                .owners(accountEntity.getOwners().stream()
-                        .map(clientMapper::toDomainModel).toList());
+                .owners(new ArrayList<>(accountEntity.getOwners().stream()
+                        .map(clientMapper::toDomainModel).toList()));
     }
 }

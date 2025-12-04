@@ -12,6 +12,7 @@ import com.raz.payment.infrastructure.database.model.entity.ClientEntity;
 public class ClientMapper implements EntityMapper<ClientEntity, Client> {
     public ClientEntity toEntity(Client client) {
         return ClientEntity.builder()
+                .id(Optional.ofNullable(client.getId()).map(UUID::fromString).orElse(null) )
                 .lastName(client.getLastName())
                 .firstName(client.getFirstName())
                 .birthDate(client.getBirthDate())

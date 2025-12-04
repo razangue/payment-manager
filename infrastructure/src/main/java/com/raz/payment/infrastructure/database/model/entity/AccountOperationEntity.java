@@ -30,9 +30,7 @@ public class AccountOperationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private BigDecimal accountBalanceBeforeOperation;
     private BigDecimal amount;
-    private BigDecimal accountBalanceAfterOperation;
     private LocalDateTime date;
 
     @Enumerated(EnumType.STRING)
