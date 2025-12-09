@@ -16,29 +16,26 @@ import lombok.AllArgsConstructor;
 @Component
 @AllArgsConstructor
 public class NotificationMessageConsumer {
-   private static final Logger logger = LoggerFactory.getLogger(NotificationMessageConsumer.class);
-   private final ObjectMapper customObjectMapper;
-   private final NotificationService notificationService;
+    private static final Logger logger = LoggerFactory.getLogger(NotificationMessageConsumer.class);
+    private final ObjectMapper customObjectMapper;
+    private final NotificationService notificationService;
 
-   @KafkaListener(topics = "${operation.notification.kafka.topic.name}", 
-   groupId = "${spring.kafka.consumer.group-id}",
-containerFactory = "kafkaListenerContainerFactory"
-)
-   public void consumeNotification(ConsumerRecord<String, String> record,
-                                                     Acknowledgment ack) {
+    @KafkaListener(topics = "${operation.notification.kafka.topic.name}", groupId = "${spring.kafka.consumer.group-id}", containerFactory = "kafkaListenerContainerFactory")
+    public void consumeNotification(ConsumerRecord<String, String> record,
+            Acknowledgment ack) {
         String key = record.key();
         String value = record.value();
 
         try {
-            Notification  notification  = customObjectMapper.readValue(value, Notification.class);
+            Notification notification = customObjectMapper.readValue(value, Notification.class);
             // Avoid doublons
-            if (notificationService.findByOperationDetailId(notification .getOperationDetailId()).isPresent()) {
-                logger.info("Notification {} already processed, skipping.", notification .getOperationDetailId());
+            if (notificationService.findByOperationDetailId(notification.getOperationDetailId()).isPresent()) {
+                logger.info("Notification {} already processed, skipping.", notification.getOperationDetailId());
             } else {
                 notificationService.save(notification);
-                logger.info("Processed notification for operationDetail {} and account number {}", 
-                            notification.getOperationDetailId(),
-                            notification.getAccountNumber());
+                logger.info("Processed notification for operationDetail {} and account number {}",
+                        notification.getOperationDetailId(),
+                        notification.getAccountNumber());
             }
             // manual ACK after processing
             ack.acknowledge();

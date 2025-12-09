@@ -15,16 +15,22 @@ import com.raz.payment.domain.interfaces.NotificationMessageSender;
 import com.raz.payment.domain.model.client.Notification;
 import com.raz.payment.domain.model.client.OperationDetail;
 
-import lombok.RequiredArgsConstructor;
-
 @Component
-@RequiredArgsConstructor
+
 public class NotificationMessageProducer implements NotificationMessageSender {
     private static final Logger logger = LoggerFactory.getLogger(NotificationMessageProducer.class);
     private final KafkaTemplate<String, String> kafkaTemplate;
-    @Value("${operation.notification.kafka.topic.name}")
-    private String topic;
+    private final String topic;
     private final ObjectMapper customObjectMapper;
+
+
+    public NotificationMessageProducer(KafkaTemplate<String,String> kafkaTemplate, 
+        @Value("${operation.notification.kafka.topic.name}")String topic, ObjectMapper customObjectMapper) {
+        this.kafkaTemplate = kafkaTemplate;
+        this.topic = topic;
+        this.customObjectMapper = customObjectMapper;
+    }
+
 
     @Override
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
