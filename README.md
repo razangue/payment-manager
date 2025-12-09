@@ -1,6 +1,6 @@
 # Payment Manager - with(Hexagonal architecture)
 
-It is not finished I am fixing some bugs on test(I didn't push branch with unit tests because it not stable)
+I designed this application with hexagonal architecture. I have 3 modules
 
 Modules:
 - payment-domain
@@ -19,11 +19,10 @@ Modules:
 - After updating account balance, create operation and operation detail, we send a notification for each operation detail
 
 For tests use POSTMAN
-Start infrastructure services: (Run with Docker Compose)
+=>Start infrastructure services: (Run with Docker Compose) => for starting postgresql and kafka. Use the command below on terminal:
 
-```bash
 docker compose up -d
-```
+
 =>start create client : 
 - url API:  http://localhost:8080/api/clients/create
 - body:
